@@ -1,21 +1,35 @@
+import ProvinceRepository from '../repositories/province.repository.js'
+
 export default class ProvinceService {
-  async getAllAsync() {
-    return [];
+
+  getAllAsync = async () => {
+    const repo = new ProvinceRepository();
+    const returnArray = await repo.GetAllAsync();
+    return returnArray;
   }
+
 
   async getByIdAsync(id) {
-    return { id };
+    const repo = new ProvinceRepository();
+    const returnObject = await repo.GetByIdAsync(id);
+    return returnObject;
   }
 
-  async createAsync(data) {
-    return data;
+  async createAsync(entity) {
+    const repo = new ProvinceRepository();
+    const error = await repo.CreateAsync(entity);
+    return error;
   }
 
-  async updateAsync(id, data) {
-    return { id, ...data };
+  async updateAsync(entity) {
+    const repo = new ProvinceRepository();
+    const error = await repo.UpdateAsync(entity);
+    return error;
   }
 
-  async deleteAsync(id) {
-    return true;
+  async deleteByIdAsync(id) {
+    const repo = new ProvinceRepository();
+    const error = await repo.DeleteByIdAsync(id);
+    return error;
   }
 }
