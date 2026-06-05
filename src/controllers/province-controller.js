@@ -34,19 +34,16 @@ router.post('', async (req, res) => {
     respuesta = res.status(400).send(error);
   }
   return respuesta;
-});
+})
 
 router.put('', async (req, res) => {
-  let respuesta;
   const error = await svc.updateAsync(req.body);
   if (error == null) {
-    respuesta = res.status(201).json();
-  } else {
-    respuesta = res.status(400).send(error);
-    respuesta = res.status(404).send(error);
+    return res.status(200).json();
   }
-  return respuesta;
-});
+  return res.status(error.status).send(error.message);
+})
+
 router.delete('/:id', async (req, res) => {
   let respuesta;
   const error = await svc.deleteByIdAsync(req.params.id);

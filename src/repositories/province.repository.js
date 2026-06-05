@@ -42,12 +42,12 @@ export default class ProvinceRepository {
 			const values = [entity.name, entity.full_name, entity.latitude, entity.longitude, entity.display_order];
             const result = await client.query(sql, values);
             await client.end();
-		} catch (error) {
-			console.log(error);
-			error = new Error('Error al crear la provincia.');
+		} catch (err) {
+			console.log(err);
+			error = err;
 		}
 		return error;
-     }
+    }
 
 	updateAsync = async (entity) => {
         let error = null;
@@ -58,12 +58,13 @@ export default class ProvinceRepository {
 			const values = [entity.name, entity.full_name, entity.latitude, entity.longitude, entity.display_order, entity.id];
             const result = await client.query(sql, values);
             await client.end();
-		} catch (error) {
-			console.log(error);
-			error = new Error('Error al actualizar la provincia.');
+		} catch (err) {
+			console.log(err);
+			error = err;
 		}
 		return error;
     }
+
 	deleteByIdAsync = async (id) => {
         let error = null;
         const client = new Client(DBConfig);
@@ -73,9 +74,9 @@ export default class ProvinceRepository {
 			const values = [id];
             const result = await client.query(sql, values);
             await client.end();
-		} catch (error) {
-			console.log(error);
-			error = new Error('Error al eliminar la provincia.');
+		} catch (err) {
+			console.log(err);
+			error = err;
 		}
 		return error;
     }
