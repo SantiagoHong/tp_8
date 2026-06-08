@@ -1,35 +1,48 @@
-import 'dotenv/config' 
-import fs from 'fs';  
+import 'dotenv/config'
+import fs from 'fs'
+import path from 'path'
 
+const { promises: fsPromises } = fs
 
-class LogHelper {     
-        
-    constructor() 
-    {         
-        this.filePath            = process.env.LOG_FILE_PATH;         
-        this.fileName            = process.env.LOG_FILE_NAME;         
-        this.logToFileEnabled    = process.env.LOG_TO_FILE_ENABLED.toLowerCase() === 'true';         
-        this.logToConsoleEnabled = process.env.LOG_TO_CONSOLE_ENABLED.toLowerCase() === 'true';     
-    }      
-    /**
-     * Este método almacena en un archivo de texto y/o por muestra consola información del Error.     
-     * @param {*} errorObject
-     */     
-    
-    logError = (errorObject) => {        
-        const logText = `[${new Date().toISOString()}] ${errorObject.message}`
-        
-        if (this.logToConsoleEnabled){
-            console.log(logText)
-        }
+class LogHelper {
+	constructor() {
+		this.filePath = process.env.LOG_FILE_PATH || './logs'
+		this.fileName = process.env.LOG_FILE_NAME || 'app.log'
+		this.logToFileEnabled = (process.env.LOG_TO_FILE_ENABLED || 'false').toLowerCase() === 'true'
+		this.logToConsoleEnabled = (process.env.LOG_TO_CONSOLE_ENABLED || 'true').toLowerCase() === 'true'
+	}
 
-        if (this.logToFileEnabled) {
-            if (!fs.existsSync(this.filePath)) {
-                fs.mkdirSync(this.filePath, { recursive: true });
-            }
-            fs.appendFileSync(this.filePath + this.fileName, logText + '\n');
-        }
-    }   
-} 
+	async log(errorObject) {
+		try {
+			const timestamp = new Date().toISOString()
+			let message = ''
 
-export default new LogHelper();
+			if (errorObject instanceof Error) {
+				message = errorObject.stack || errorObject.message
+			} else if (typeof errorObject === 'string') {
+				message = errorObject
+			}
+
+			const logLine = `${timestamp} - ${message}\n`
+
+			if (this.logToConsoleEnabled) {
+				if (errorObject instanceof Error) {
+					console.error(logLine)
+				} else {
+					console.log(logLine)
+				}
+			}
+
+			if (this.logToFileEnabled) {
+				const dir = this.filePath
+				const file = path.join(dir, this.fileName)
+				await fsPromises.mkdir(dir, { recursive: true })
+				await fsPromises.appendFile(file, logLine, { encoding: 'utf8' })
+			}
+		} catch (err) {
+			console.error('LogHelper failed:', err)
+		}
+	}
+}
+
+export default new LogHelper()
