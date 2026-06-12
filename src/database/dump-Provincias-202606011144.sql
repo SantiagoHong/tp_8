@@ -32,7 +32,7 @@ CREATE TABLE public.provincias (
     name character varying NOT NULL,
     full_name character varying NOT NULL,
     latitude integer,
-    longtitude integer,
+    longitude integer,
     display_order integer
 );
 

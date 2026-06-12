@@ -57,7 +57,7 @@ export default class ProvinceRepository {
 			const values = [entity.name, entity.full_name, entity.latitude, entity.longitude, entity.display_order];
             const result = await client.query(sql, values);
             await client.end();
-			await logHelper.log(`Se creó exitosamente province con id=${created.id}`)
+			await logHelper.log(`Se creó exitosamente province`)
 		
 		} catch (error) {
 			await logHelper.log(new Error(error))
@@ -79,7 +79,7 @@ export default class ProvinceRepository {
 			const values = [entity.name, entity.full_name, entity.latitude, entity.longitude, entity.display_order, entity.id];
             const result = await client.query(sql, values);
             await client.end();
-			await logHelper.log(`Se actualizó exitosamente province con id=${updated.id}`)
+			await logHelper.log(`Se actualizó exitosamente province con id=${entity.id}`)
 		} catch (error) {
 			await logHelper.log(new Error(error))
 			try { 
