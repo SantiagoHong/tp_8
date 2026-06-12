@@ -1,6 +1,6 @@
 import DBConfig from '../configs/db-config.js';
 import pkg from 'pg';
-import LogHelper from './../helpers/log-helper.js'
+import logHelper from './../helpers/log-helper.js'
 const { Client, Pool } = pkg;
 
 export default class ProvinceRepository {
